@@ -1,0 +1,26 @@
+#切换配置
+spring:
+  profiles:
+    active: dev
+  # HTTP ENCODING
+  http:
+      encoding:
+        enabled: true
+        force: true
+        charset: UTF-8
+  freemarker:
+    cache: false
+    charset: UTF-8
+    suffix: .html
+    content-type: text/html
+    check-template-location: true
+    #开发时关闭缓存,不然没法看到实时页面
+    expose-request-attributes: false
+    expose-session-attributes: false
+    request-context-attribute: ctx
+#   页面可以通过request.contextPath可以获取相对路径
+mybatis:
+    #check-config-location: true
+    #config-location: classpath:/config/mybatis-config.xml
+  type-aliases-package: com.aliyunstudy.entity
+  mapper-locations: classpath:/config/mapper/*.xml

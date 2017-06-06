@@ -1,0 +1,130 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Spring Boot JSP－Index</title>
+</head>
+<body>
+<div id="allmap"></div>
+</body>
+<#include "${ctx}/common/header.html" parse=true encoding="utf-8">
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=yGQt3GBeFuzNIG9OlnOZ3u4A5H3WcSe5"></script>
+<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
+<script type="text/javascript">
+
+//百度地图
+
+var currentLat="",currentLon="";
+var query="酒店";
+
+
+function getBaiduMap(){
+//百度地图API功能 定位
+if(navigator.geolocation ){
+navigator.geolocation.getCurrentPosition(translatePoint,locationError); //通过手机的webKit定位（目前ios系统对非https网站不提供支持）,所以在locationError（）中使用BMap.Geolocation()
+}
+else{
+tipDialog.show(tip_fail,'温馨提示','浏览器不支持html5来获取地理位置信息');
+}
+
+}
+function locationError(){
+var geolocation = new BMap.Geolocation();
+geolocation.getCurrentPosition(function(r){
+if(this.getStatus()== BMAP_STATUS_SUCCESS){
+currentLat = r.point.lat;
+currentLon = r.point.lng;
+var gpsPoint = new BMap.Point(currentLon, currentLat);
+BMap.Convertor.translate(gpsPoint, 0, initMap); //转换坐标
+}
+});
+}
+var map= new BMap.Map("allmap");
+//转换坐标
+function translatePoint(position){
+currentLat = position.coords.latitude;
+currentLon = position.coords.longitude;
+var gpsPoint = new BMap.Point(currentLon, currentLat);
+BMap.Convertor.translate(gpsPoint, 0, initMap); //转换坐标
+
+}
+
+function initMap(point){
+//初始化地图
+map.enableScrollWheelZoom();
+map.enableKeyboard();
+map.enableContinuousZoom();
+map.enableInertialDragging();
+map.addControl(new BMap.NavigationControl());
+map.addControl(new BMap.ScaleControl());
+map.addControl(new BMap.OverviewMapControl());
+map.setDefaultCursor("crosshair");
+map.centerAndZoom(point, 20);
+var marker1=new BMap.Marker(point);
+var label = new BMap.Label('当前位置', { offset: new BMap.Size(25, 0) });
+label.setStyles({
+border: "solid 1px #00f",
+color: "#00f",
+padding: "0 5px"
+});
+marker1.setLabel(label); //这里是添加一个文字 ，显示在标注的右边
+map.addOverlay(marker1) ;
+getPonint(currentLon,currentLat,query);
+}
+var marker="";
+//获取百度地图的坐标点
+function getPonint(currentLon, currentLat,query){
+var currenponit=currentLat+","+currentLon;
+//var currenponit="31.973505,118.746815";
+var url="http://api.map.baidu.com/place/v2/search?query="+query+"&location="+currenponit+"&radius=20000&output=json&ak=yGQt3GBeFuzNIG9OlnOZ3u4A5H3WcSe5&callback=?";
+//var UR2="http://api.map.baidu.com/place/v2/search?query=%E5%81%9C%E8%BD%A6%E5%9C%BA&location=31.973505,118.746815&radius=200000000&output=json&ak=yGQt3GBeFuzNIG9OlnOZ3u4A5H3WcSe5&callback=?"
+$.getJSON(url,function(data){
+if(data.status==0){
+if(marker!=""){
+map.clearOverlays();//清除标记点
+var gpsPoint = new BMap.Point(currentLon, currentLat);
+var marker1=new BMap.Marker(gpsPoint);
+map.centerAndZoom(gpsPoint, 20);
+var label = new BMap.Label('当前位置', { offset: new BMap.Size(25, 0) });
+label.setStyles({
+border: "solid 1px #00f",
+color: "#00f",
+padding: "0 5px"
+});
+marker1.setLabel(label); //这里是添加一个文字 ，显示在标注的右边
+map.addOverlay(marker1) ;
+}
+$.each(data.results,function(index,item){
+var p0=item.location.lat;
+var p1=item.location.lng;
+var point = new BMap.Point(p1, p0); //循环生成新的地图点
+var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {
+offset: new BMap.Size(10, 25), // 指定定位位置
+imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移
+});
+// 将google地图中的经纬度转化为百度地图的经纬度
+BMap.Convertor.translate(point, 2, function(point){
+marker = new BMap.Marker(point);
+marker.setIcon(myIcon);
+map.addOverlay(marker);
+map.centerAndZoom(point, 15);
+var info='<p style=’font-size:12px;lineheight:1.8em;’>'+item.name+'</br>地址:'+item.address;
+	if(item.telephone!="" &&item.telephone!=undefined){
+	info+='</br> 电话：'+item.telephone;
+	}
+	info+='</br></p>';
+marker.addEventListener("click",function(){
+map.openInfoWindow(new BMap.InfoWindow(info),point); //开启信息窗口
+});
+
+});
+});
+}
+else{
+tipDialog.show(tip_fail,'温馨提示',data.message);
+}
+
+});
+}
+</script>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发送</title>
+    <style>
+        .dis {
+            color: rgba(27, 35, 31, 0.26) !important;
+            /*disabled : true;*/
+        }
+    </style>
+    <#include "common/header.html" parse=true encoding="utf-8">
+        <!-- 苹果专用 -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="神算堂">
+        </head>
+<body ontouchstart>
+<div id="app" v-cloak>
+    <div class="weui-cells weui-cells_form">
+
+        <div class="weui-cells__title">文本域</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" v-model="msg" placeholder="请输入文本" rows="3"></textarea>
+                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                </div>
+            </div>
+        </div>
+
+            <a href="javascript:;" class="weui-btn weui-btn_primary" @click="send">发送</a>
+    </div>
+</div>
+<script src="${base}/js/send.js"></script>
+</body>
+</html>

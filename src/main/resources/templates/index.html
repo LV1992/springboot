@@ -1,0 +1,56 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>定位位置</title>
+    <script type="text/javascript"
+            src="http://webapi.amap.com/maps?v=1.3&key=7dacc6a93d4d4adb80d844c20a82a146"></script>
+    <#include "common/header.html" parse=true encoding="utf-8">
+        </head>
+<body>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#example-navbar-collapse">
+                <span class="sr-only">切换导航</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">位置定位系统</a>
+        </div>
+        <div class="collapse navbar-collapse" id="example-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="${base}/mylocation">我的行程</a></li>
+                <li style="border-bottom: rgba(52,53,54,0.22) solid 1px"></li>
+                <li><a href="${base}/watchlocation">监控行程</a></li>
+                <li style="border-bottom: rgba(52,53,54,0.22) solid 1px"></li>
+                <li><a href="#">分离的链接</a></li>
+                <li style="border-bottom: rgba(52,53,54,0.22) solid 1px"></li>
+                <li><a href="#">另一个分离的链接</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container" id="app" style="width:100%; height:100%">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading" id="tip">您当前的位置是首页。。。</div>
+            <div class="panel-body">
+
+                <div id="container" style="width:100%; height:100%"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">©2016 lvyihang</p>
+    </div>
+</footer>
+
+<script type="text/javascript" src="${base}/js/index.js"></script>
+</body>
+</html>
